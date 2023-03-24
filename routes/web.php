@@ -26,9 +26,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -39,4 +39,15 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 
-Route::get('/welcome', [NewsController::class, 'index']);
+Route::get('/welcome', [NewsController::class, 'index'])->name('homepage');
+
+Route::group([
+    "middleware" => ["auth", "verified"]
+
+], function() {
+    Route::get('/dashboard', [NewsController::class, 'newsByUser'])->name('dashboard');
+    Route::post('/news', [NewsController::class, 'store'])->name('storeNews');
+    Route::get('/editNews', [NewsController::class, 'edit'])->name('editNews');
+    Route::post('/updateNews', [NewsController::class, 'update'])->name('updateNews');
+    Route::post('/deleteNews', [NewsController::class, 'destroy'])->name('deleteNews');
+});

@@ -1,6 +1,7 @@
+import { Link } from "@inertiajs/react";
 import React from "react";
 
-export default function Navbar() {
+export default function Navbar({user}) {
     return (
         <>
             <div className="navbar bg-base-100">
@@ -66,18 +67,27 @@ export default function Navbar() {
                 </div>
                 <div className="navbar-end">
                     <div className="form-control mr-2">
-                        <input type="text" placeholder="Search" className="input input-bordered" />
+                        <input type="text" placeholder="Search" className="input input-bordered w-full" />
                     </div>
                     <div className="dropdown dropdown-end">
                         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                             <div className="w-10 rounded-full">
-                            <img src="https://source.unsplash.com/500x500/?user" />
+                                <img src="https://source.unsplash.com/500x500/?user" />
                             </div>
                         </label>
                         <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
-                            <li><a>Profile</a></li>
-                            <li><a>Settings</a></li>
-                            <li><a>Logout</a></li>
+                            {!user ? (
+                                <>
+                                    <li><Link href={route('login')}>Login</Link></li>
+                                    <li><Link href={route('register')}>Register</Link></li>
+                                </>
+                            ) : (
+                                <>
+                                    <li><Link href={route('dashboard')}>Dashboard</Link></li>
+                                    <li><Link href={route('profile.edit')}>Profile</Link></li>
+                                    <li><Link href={route('logout')} method="post" as="button">Logout</Link></li>
+                                </>
+                            )}
                         </ul>
                     </div>
                 </div>
